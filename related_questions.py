@@ -1,4 +1,3 @@
-import sys
 __author__ = "Albert Yu"
 
 # https://www.quora.com/challenges#related_questions
@@ -81,6 +80,11 @@ class Tree(object):
         self.size += 1
 
     def remove(self, vertex):
+        """
+        Removes a vertex from the tree
+        :param vertex:
+        :return:
+        """
         if self.vertices[vertex] is None:
             raise KeyError
         else:
@@ -91,18 +95,34 @@ class Tree(object):
             self.size -= 1
 
     def connect(self, vertex_1, vertex_2):
+        """
+        Connects two vertices
+        :param vertex_1:
+        :param vertex_2:
+        :return:
+        """
         if self.vertices[vertex_1] is None or self.vertices[vertex_2] is None:
             raise KeyError
         else:
             vertex_1.add_neighbor(vertex_2)
 
     def disconnect(self, vertex_1, vertex_2):
+        """
+        Disconnects two vertices
+        :param vertex_1:
+        :param vertex_2:
+        :return:
+        """
         if self.vertices[vertex_1] is None or self.vertices[vertex_2] is None:
             raise KeyError
         else:
             vertex_1.remove_neighbor(vertex_2)
 
     def num_leaves(self):
+        """
+        Counts the number of leaves
+        :return:
+        """
         count = 0
         for vertex in self.vertices:
             if vertex.is_leaf() is True:
@@ -110,6 +130,10 @@ class Tree(object):
         return count
 
     def clear_visits(self):
+        """
+        Marks all vertices as not visited
+        :return:
+        """
         for vertex in self.vertices:
             vertex.visited = False
 
@@ -147,9 +171,20 @@ def find_max_time(paths):
 
 
 def main():
-    num_vertices = 5  # line 1 of txt file
-    time_values = [2, 2, 1, 2, 2]  # line 2
-    edges = [[1, 2], [2, 3], [3, 4], [4, 5]]  # lines 3-7
+    input_data = []
+    with open('sample.txt', 'r') as f:
+        data = f.readlines()
+
+        for line in data:
+            numbers = line.split()
+            integers = []
+            for number in numbers:
+                integers.append(int(number))
+            input_data.append(integers)
+
+    num_vertices = input_data[0][0]  # line 1 of txt file
+    time_values = input_data[1]  # line 2
+    edges = input_data[2:len(input_data) - 1]  # lines 3 to N + 1
     tree = Tree()
     i = 0
     while i < num_vertices:
@@ -159,13 +194,12 @@ def main():
         tree.connect(tree.label_to_obj[pair[0]], tree.label_to_obj[pair[1]])
 
     leaves = [vertex for vertex in tree.vertices if vertex.is_leaf() is True]
-    leaf_names = [leaf.label for leaf in leaves]
-    print("Leaves are:", leaf_names)
     paths = []
     for leaf in leaves:
         paths.append(leaf.iterate())
         tree.clear_visits()
     the_vertices_we_want = find_max_time(paths)
+    path_we_want = None
     for path in paths:
         if path[0] == the_vertices_we_want[0] and path[len(path) - 1] == the_vertices_we_want[1]:
             path_we_want = path
@@ -176,7 +210,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
 
 
