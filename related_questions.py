@@ -184,7 +184,7 @@ def main():
 
     num_vertices = input_data[0][0]  # line 1 of txt file
     time_values = input_data[1]  # line 2
-    edges = input_data[2:len(input_data) - 1]  # lines 3 to N + 1
+    edges = input_data[2:len(input_data)]  # lines 3 to N + 1
     tree = Tree()
     i = 0
     while i < num_vertices:
